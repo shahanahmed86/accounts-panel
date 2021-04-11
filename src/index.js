@@ -1,11 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+// react-router-dom
+import { BrowserRouter as Router } from 'react-router-dom';
+
+// css
 import './index.css';
+
+// components
 import App from './App';
+
+// context
+import { AuthProvider } from './context';
+
+// pwa
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
-const Wrapper = () => <App />;
+const Wrapper = () => (
+	<AuthProvider>
+		<Router>
+			<App />
+		</Router>
+	</AuthProvider>
+);
 const ele = document.getElementById('root');
 ReactDOM.render(<Wrapper />, ele);
 

@@ -1,21 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Suspense, lazy } from 'react';
+
+// css
 import './App.css';
 
-function App() {
+// react-router-dom
+import { Switch, Route, Redirect } from 'react-router-dom';
+
+// context
+import { withAuthContext } from './context';
+
+// reusable
+import { Loader } from './reusable';
+
+// reusable with lazy effect
+const CustomRoute = lazy(() => import('./reusable/CustomRoute'));
+const Login = lazy(() => import('./components/Login'));
+const Dashboard = lazy(() => import('./components/Dashboard'));
+
+function App({ isLoading }) {
 	return (
-		<div className='App'>
-			<header className='App-header'>
-				<img src={logo} className='App-logo' alt='logo' />
-				<p>
-					Edit <code>src/App.js</code> and save to reload.
-				</p>
-				<a className='App-link' href='https://reactjs.org' target='_blank' rel='noopener noreferrer'>
-					Learn React
-				</a>
-			</header>
-		</div>
+		<Suspense fallback={<Loader loading={true} />}>
+			<Switch>
+				<CustomRoute exact={true} path='/login' isPrivate={false}>
+					<Login />
+				</CustomRoute>
+
+				<CustomRoute path='/dashboard'>
+					<Dashboard />
+				</CustomRoute>
+
+				<Route render={() => <Redirect to='/login' />} />
+			</Switch>
+			<Loader loading={isLoading} />
+		</Suspense>
 	);
 }
 
-export default App;
+export default withAuthContext(App);
