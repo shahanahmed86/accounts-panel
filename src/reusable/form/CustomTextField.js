@@ -22,9 +22,9 @@ function CustomTextField({
 	const [showPassword, setShowPassword] = useState(false);
 	const toggleShowPassword = () => setShowPassword(!showPassword);
 	const InputProps = {
-		startAdornment: (
-			<InputAdornment position='start'>
-				<IconButton color={showPassword ? 'secondary' : 'primary'} onClick={toggleShowPassword} edge='start'>
+		endAdornment: (
+			<InputAdornment position='end'>
+				<IconButton color={showPassword ? 'secondary' : 'primary'} onClick={toggleShowPassword} edge='end'>
 					{showPassword ? <Visibility /> : <VisibilityOff />}
 				</IconButton>
 			</InputAdornment>

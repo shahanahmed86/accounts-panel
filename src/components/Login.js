@@ -17,12 +17,15 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 // reusable
 import { Copyright, CustomTextField, CustomCheckbox } from '../reusable';
 
+// context
+import { withAuthContext } from '../context';
+
 const initialState = {
 	username: '',
 	password: ''
 };
 
-function Login() {
+function Login({ onLoginAdmin, onLoginUser }) {
 	const classes = useStyles();
 
 	const [form, setForm] = useState({ ...initialState });
@@ -33,29 +36,25 @@ function Login() {
 	const [isAdmin, setAdmin] = useState(false);
 	const toggleAdmin = ({ target: { checked } }) => setAdmin(checked);
 
-	const [isSignUp, setSignUp] = useState(false);
-	const toggleSignUp = () => setSignUp(!isSignUp);
-
 	const onSubmitHanlder = (ev) => {
 		if (ev && ev.preventDefault) ev.preventDefault();
 
-		if (isSignUp) {
-			console.log('doing sign up...');
-		} else {
-			console.log('doing sign in...');
+		if (!Object.values(form).every((n) => n.trim())) {
+			return console.log('form was not properly filled...');
 		}
+		if (isAdmin) onLoginAdmin(form);
+		else onLoginUser(form);
 	};
 
 	useEffect(() => {
 		return () => {
 			setForm({ ...initialState });
 			setAdmin(false);
-			setSignUp(false);
 		};
 	}, []);
 
 	return (
-		<Grid container component='main' className={classes.root}>
+		<Grid container component='main' className={classes.root} justify='center'>
 			<CssBaseline />
 			<Grid item xs={false} sm={6} md={7} className={classes.image} />
 			<Grid item xs={12} sm={6} md={5} component={Paper} elevation={6} square container alignItems='center'>
@@ -83,21 +82,15 @@ function Login() {
 							formValue={form.password}
 							handleChange={onFormChange}
 							label='Password'
-							autoFocus={true}
 						/>
 						<CustomCheckbox label='Login as admin' handleChange={toggleAdmin} formKey='isAdmin' formValue={isAdmin} />
 						<Button type='submit' fullWidth variant='contained' color='primary' className={classes.submit}>
-							Sign {isSignUp ? 'Up' : 'In'}
+							Sign In
 						</Button>
 						<Grid item xs>
 							<Grid container>
 								<Link href='#' variant='body2' className='cursor-pointer'>
 									Forgot password?
-								</Link>
-							</Grid>
-							<Grid item>
-								<Link onClick={toggleSignUp} variant='body2' className='cursor-pointer'>
-									{isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
 								</Link>
 							</Grid>
 						</Grid>
@@ -111,7 +104,7 @@ function Login() {
 	);
 }
 
-export default Login;
+export default withAuthContext(Login);
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -128,7 +121,11 @@ const useStyles = makeStyles((theme) => ({
 		margin: theme.spacing(8, 4),
 		display: 'flex',
 		flexDirection: 'column',
-		alignItems: 'center'
+		justifyContent: 'center',
+		alignItems: 'center',
+		[theme.breakpoints.up('xl')]: {
+			margin: 'auto'
+		}
 	},
 	avatar: {
 		margin: theme.spacing(1),

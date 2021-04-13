@@ -17,12 +17,51 @@ import { AuthProvider } from './context';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
+// apollographql
+import { setContext } from 'apollo-link-context';
+import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { createUploadLink } from 'apollo-upload-client';
+
+const authLink = setContext((_, { headers }) => {
+	const token = localStorage.getItem('token');
+	return {
+		headers: {
+			...headers,
+			authorization: token ? `Bearer ${token}` : ''
+		}
+	};
+});
+
+const client = new ApolloClient({
+	link: authLink.concat(
+		createUploadLink({
+			uri: '/graphql'
+		})
+	),
+	cache: new InMemoryCache(),
+	defaultOptions: {
+		watchQuery: {
+			fetchPolicy: 'no-cache'
+		},
+		query: {
+			fetchPolicy: 'no-cache'
+		},
+		mutate: {
+			fetchPolicy: 'no-cache'
+		}
+	}
+});
+
 const Wrapper = () => (
-	<AuthProvider>
-		<Router>
-			<App />
-		</Router>
-	</AuthProvider>
+	<ApolloProvider client={client}>
+		<AuthProvider>
+			<Router>
+				<App />
+			</Router>
+		</AuthProvider>
+	</ApolloProvider>
 );
 const ele = document.getElementById('root');
 ReactDOM.render(<Wrapper />, ele);
