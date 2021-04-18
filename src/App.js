@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 
-// css
-import './App.css';
+// scss
+import './App.scss';
 
 // react-router-dom
 import { Switch, Route, Redirect } from 'react-router-dom';
@@ -10,12 +10,16 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { withAuthContext } from './context';
 
 // reusable
-import { Loader } from './reusable';
+import { Loader } from './components';
+
+// toast
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // reusable with lazy effect
-const CustomRoute = lazy(() => import('./reusable/CustomRoute'));
-const Login = lazy(() => import('./components/Login'));
-const Dashboard = lazy(() => import('./components/Dashboard'));
+const CustomRoute = lazy(() => import('./components/CustomRoute'));
+const Login = lazy(() => import('./views/Login'));
+const Layout = lazy(() => import('./layout'));
 
 function App({ isLoading }) {
 	return (
@@ -25,13 +29,14 @@ function App({ isLoading }) {
 					<Login />
 				</CustomRoute>
 
-				<CustomRoute path='/dashboard'>
-					<Dashboard />
+				<CustomRoute path='/app'>
+					<Layout />
 				</CustomRoute>
 
 				<Route render={() => <Redirect to='/login' />} />
 			</Switch>
 			<Loader loading={isLoading} />
+			<ToastContainer />
 		</Suspense>
 	);
 }

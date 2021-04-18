@@ -10,7 +10,7 @@ function CustomRoute({ isPrivate = true, isLoggedIn, exact = false, path, ...pro
 	const login = useRouteMatch('/login');
 
 	useEffect(() => {
-		if (isLoggedIn && !isPrivate && (login || login.isExact)) history.push('/dashboard');
+		if (isLoggedIn && !isPrivate && (login || login.isExact)) history.push('/app');
 
 		if (!isLoggedIn && isPrivate) history.push('/login');
 	}, [login, isLoggedIn, history, isPrivate]);

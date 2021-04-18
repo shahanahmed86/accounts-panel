@@ -1,3 +1,7 @@
-export { default as Dashboard } from './Dashboard';
+export * from './form';
 
-export { default as Login } from './Login';
+export { default as CustomRoute } from './CustomRoute';
+
+export { default as Loader } from './Loader';
+
+export { default as Copyright } from './Copyright';

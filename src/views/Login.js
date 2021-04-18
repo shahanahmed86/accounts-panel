@@ -15,7 +15,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 // reusable
-import { Copyright, CustomTextField, CustomCheckbox } from '../reusable';
+import { Copyright, CustomTextField, CustomCheckbox } from '../components';
 
 // context
 import { withAuthContext } from '../context';

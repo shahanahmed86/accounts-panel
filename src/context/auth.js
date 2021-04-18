@@ -1,10 +1,14 @@
 import React, { createContext, useEffect, useState } from 'react';
 
+// initial-state
 import { initialAuthState } from './initial-data';
 
 // graphql
-import { LOGIN_ADMIN, LOGIN_USER } from '../graphql';
+import { ACCOUNT_SIGN_OUT, ADMIN_SIGN_OUT, LOGIN_ADMIN, LOGIN_USER } from '../graphql';
 import { useMutation } from '@apollo/client';
+
+// utils
+import { toastError } from '../utils/logics';
 
 const { Provider, Consumer } = createContext();
 
@@ -15,10 +19,24 @@ export const withAuthContext = (Component) => (props) => (
 export function AuthProvider(props) {
 	const [isLoading, setLoading] = useState(true);
 	const [authState, setAuthState] = useState({ ...initialAuthState });
+	const [isDrawerOpen, setDrawerOpen] = useState(false);
+	const toggleDrawer = () => setDrawerOpen(!isDrawerOpen);
 
-	const onLogout = () => {
-		localStorage.removeItem('token');
-		setAuthState({ ...initialAuthState });
+	// logout
+	const [adminSignOut] = useMutation(ADMIN_SIGN_OUT);
+	const [accountSignOut] = useMutation(ACCOUNT_SIGN_OUT);
+	const onLogout = async () => {
+		setLoading(true);
+		try {
+			if (authState.role === 'admin') await adminSignOut();
+			if (authState.role === 'account') await accountSignOut();
+			setAuthState({ ...initialAuthState });
+		} catch (error) {
+			console.error(error);
+			toastError(error.message);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	// login admin
@@ -27,15 +45,15 @@ export function AuthProvider(props) {
 		setLoading(true);
 		try {
 			const data = await loginAdmin({ variables });
-			const { token, user } = data.data.login;
-			localStorage.setItem('token', token);
+			const { role, ...user } = data.data.login;
 			setAuthState({
 				user,
 				isLoggedIn: true,
-				role: 'admin'
+				role
 			});
 		} catch (error) {
 			console.error(error);
+			toastError(error.message);
 		} finally {
 			setLoading(false);
 		}
@@ -47,15 +65,15 @@ export function AuthProvider(props) {
 		setLoading(true);
 		try {
 			const data = await loginUser({ variables });
-			const { token, user } = data.data.login;
-			localStorage.setItem('token', token);
+			const { role, ...user } = data.data.login;
 			setAuthState({
 				user,
 				isLoggedIn: true,
-				role: 'user'
+				role
 			});
 		} catch (error) {
 			console.error(error);
+			toastError(error.message);
 		} finally {
 			setLoading(false);
 		}
@@ -65,19 +83,17 @@ export function AuthProvider(props) {
 		(async () => {
 			setLoading(true);
 			try {
-				const token = localStorage.getItem('token');
-				if (!token) throw new Error('Token not found...');
-
-				const response = await fetch('http://localhost:4000/auth/loggedIn', {
+				const response = await fetch('/auth/loggedIn', {
+					credentials: 'include',
 					headers: {
-						Authorization: `Bearer ${token}`
+						'Content-Type': 'application/json'
 					}
 				});
-				const { userType, ...user } = await response.json();
+				const { role, ...user } = await response.json();
 				setAuthState({
 					user,
 					isLoggedIn: true,
-					role: userType
+					role
 				});
 			} catch (error) {
 				console.error(error);
@@ -88,7 +104,19 @@ export function AuthProvider(props) {
 	}, []);
 
 	return (
-		<Provider value={{ ...authState, setAuthState, isLoading, setLoading, onLoginAdmin, onLoginUser, onLogout }}>
+		<Provider
+			value={{
+				...authState,
+				setAuthState,
+				isLoading,
+				setLoading,
+				onLoginAdmin,
+				onLoginUser,
+				onLogout,
+				isDrawerOpen,
+				toggleDrawer
+			}}
+		>
 			{props.children}
 		</Provider>
 	);

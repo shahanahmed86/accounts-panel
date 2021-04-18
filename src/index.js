@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 // react-router-dom
 import { BrowserRouter as Router } from 'react-router-dom';
 
-// css
+// styling
 import './index.css';
 
 // components
@@ -24,20 +24,13 @@ import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client';
 
-const authLink = setContext((_, { headers }) => {
-	const token = localStorage.getItem('token');
-	return {
-		headers: {
-			...headers,
-			authorization: token ? `Bearer ${token}` : ''
-		}
-	};
-});
+const authLink = setContext((_, { headers }) => ({ ...headers, 'Content-Type': 'application/json' }));
 
 const client = new ApolloClient({
 	link: authLink.concat(
 		createUploadLink({
-			uri: '/graphql'
+			uri: '/graphql',
+			credentials: 'include'
 		})
 	),
 	cache: new InMemoryCache(),
@@ -56,11 +49,11 @@ const client = new ApolloClient({
 
 const Wrapper = () => (
 	<ApolloProvider client={client}>
-		<AuthProvider>
-			<Router>
+		<Router>
+			<AuthProvider>
 				<App />
-			</Router>
-		</AuthProvider>
+			</AuthProvider>
+		</Router>
 	</ApolloProvider>
 );
 const ele = document.getElementById('root');

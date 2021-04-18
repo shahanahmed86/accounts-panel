@@ -1,24 +1,25 @@
 // resizer
-import Resizer from "react-image-file-resizer";
+import Resizer from 'react-image-file-resizer';
+import { toast } from 'react-toastify';
 
 export async function resizeImage(file) {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		Resizer.imageFileResizer(
 			file,
-			750,
-			150,
-			"JPEG",
+			300,
+			300,
+			'JPEG',
 			100,
 			0,
-			uri => {
+			(uri) => {
 				resolve(uri);
 			},
-			"base64"
+			'base64'
 		);
 	});
 }
 export function dataURLtoFile(data_url, filename) {
-	let arr = data_url.split(","),
+	let arr = data_url.split(','),
 		mime = arr[0].match(/:(.*?);/)[1],
 		bstr = atob(arr[1]),
 		n = bstr.length,
@@ -27,4 +28,9 @@ export function dataURLtoFile(data_url, filename) {
 		u8arr[n] = bstr.charCodeAt(n);
 	}
 	return new File([u8arr], filename, { type: mime });
+}
+
+export function toastError(errorMessage) {
+	const message = errorMessage.split('error: ')[1];
+	toast.error(message);
 }
