@@ -13,3 +13,28 @@ body,
 .cursor-pointer {
 	cursor: pointer;
 }
+
+.transition-apply {
+	transition: all 500ms;
+}
+
+.no-wrap {
+	white-space: nowrap;
+	word-break: keep-all;
+}
+
+.display-flex {
+	display: flex;
+}
+
+.justify-flex-center {
+	justify-content: center;
+}
+
+.justify-flex-end {
+	justify-content: flex-end;
+}
+
+.align-flex-center {
+	align-items: center;
+}

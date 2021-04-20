@@ -16,11 +16,9 @@ export const withAuthContext = (Component) => (props) => (
 	<Consumer>{(value) => <Component {...value} {...props} />}</Consumer>
 );
 
-export function AuthProvider(props) {
+export const AuthProvider = function (props) {
 	const [isLoading, setLoading] = useState(true);
 	const [authState, setAuthState] = useState({ ...initialAuthState });
-	const [isDrawerOpen, setDrawerOpen] = useState(false);
-	const toggleDrawer = () => setDrawerOpen(!isDrawerOpen);
 
 	// logout
 	const [adminSignOut] = useMutation(ADMIN_SIGN_OUT);
@@ -112,12 +110,10 @@ export function AuthProvider(props) {
 				setLoading,
 				onLoginAdmin,
 				onLoginUser,
-				onLogout,
-				isDrawerOpen,
-				toggleDrawer
+				onLogout
 			}}
 		>
 			{props.children}
 		</Provider>
 	);
-}
+};

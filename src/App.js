@@ -7,7 +7,7 @@ import './App.scss';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 // context
-import { withAuthContext } from './context';
+import { ThemeProvider, withAuthContext } from './context';
 
 // reusable
 import { Loader } from './components';
@@ -30,7 +30,9 @@ function App({ isLoading }) {
 				</CustomRoute>
 
 				<CustomRoute path='/app'>
-					<Layout />
+					<ThemeProvider>
+						<Layout />
+					</ThemeProvider>
 				</CustomRoute>
 
 				<Route render={() => <Redirect to='/login' />} />

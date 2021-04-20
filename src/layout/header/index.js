@@ -8,9 +8,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { withAuthContext } from '../../context';
+import { withThemeContext } from '../../context';
 
-function Header({ toggleDrawer }) {
+function Header({ drawerConfig, toggleDrawer, width }) {
 	const classes = useStyles();
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
@@ -23,20 +23,31 @@ function Header({ toggleDrawer }) {
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
-
 	return (
-		<div className={classes.root}>
+		<div
+			className={`transition-apply ${classes.root}`}
+			style={
+				width === 'xs' || width === 'sm'
+					? {}
+					: {
+							marginLeft: drawerConfig.width,
+							width: `calc(100% - ${drawerConfig.width}px)`
+					  }
+			}
+		>
 			<AppBar position='static'>
 				<Toolbar>
-					<IconButton
-						edge='start'
-						className={classes.menuButton}
-						color='inherit'
-						aria-label='menu'
-						onClick={toggleDrawer}
-					>
-						<MenuIcon />
-					</IconButton>
+					{(width === 'xs' || width === 'sm') && (
+						<IconButton
+							edge='start'
+							className={classes.menuButton}
+							color='inherit'
+							aria-label='menu'
+							onClick={toggleDrawer}
+						>
+							<MenuIcon />
+						</IconButton>
+					)}
 					<Typography variant='h6' className={classes.title}>
 						Photos
 					</Typography>
@@ -75,7 +86,7 @@ function Header({ toggleDrawer }) {
 	);
 }
 
-export default withAuthContext(Header);
+export default withThemeContext(Header);
 
 const useStyles = makeStyles((theme) => ({
 	root: {
