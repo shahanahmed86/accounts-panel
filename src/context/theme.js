@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 
 // material-ui
-import withWidth from '@material-ui/core/withWidth';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 // context
 import { withAuthContext } from './auth';
@@ -15,38 +15,38 @@ export const withThemeContext = (Component) => (props) => (
 	<Consumer>{(value) => <Component {...value} {...props} />}</Consumer>
 );
 
-export const ThemeProvider = withWidth()(
-	withAuthContext(function ({ width, ...props }) {
-		const [drawerConfig, setDrawerConfig] = useState({ ...initialDrawerConfig });
-		const toggleDrawer = () => {
-			setDrawerConfig((prev) => ({ ...prev, isOpen: !prev.isOpen }));
+export const ThemeProvider = withAuthContext(function ({ onLogout, ...props }) {
+	const isMobile = useMediaQuery('(max-width:600px)');
+	const isTablet = useMediaQuery('(max-width:800px)');
+	const isDesktop = useMediaQuery('(min-width:801px)');
+	const [drawerConfig, setDrawerConfig] = useState({ ...initialDrawerConfig });
+	const toggleDrawer = () => {
+		setDrawerConfig((prev) => ({ ...prev, isOpen: !prev.isOpen }));
+	};
+
+	useEffect(() => {
+		if (isTablet) setDrawerConfig((prev) => ({ ...prev, width: 250, variant: 'temporary' }));
+		if (isDesktop) setDrawerConfig((prev) => ({ ...prev, width: prev.isOpen ? 250 : 60, variant: 'permanent' }));
+	}, [isMobile, isTablet, isDesktop, setDrawerConfig, drawerConfig.isOpen]);
+
+	useEffect(() => {
+		return () => {
+			setDrawerConfig({ ...initialDrawerConfig });
 		};
-
-		useEffect(() => {
-			if (width === 'xs' || width === 'sm') {
-				setDrawerConfig((prev) => ({ ...prev, width: 250, variant: 'temporary' }));
-			}
-			if (width === 'md' || width === 'lg' || width === 'xl') {
-				setDrawerConfig((prev) => ({ ...prev, width: prev.isOpen ? 250 : 60, variant: 'permanent' }));
-			}
-		}, [width, setDrawerConfig, drawerConfig.isOpen]);
-
-		useEffect(() => {
-			return () => {
-				setDrawerConfig({ ...initialDrawerConfig });
-			};
-		}, []);
-		return (
-			<Provider
-				value={{
-					drawerConfig,
-					setDrawerConfig,
-					toggleDrawer,
-					width
-				}}
-			>
-				{props.children}
-			</Provider>
-		);
-	})
-);
+	}, []);
+	return (
+		<Provider
+			value={{
+				drawerConfig,
+				setDrawerConfig,
+				toggleDrawer,
+				isMobile,
+				isTablet,
+				isDesktop,
+				onLogout
+			}}
+		>
+			{props.children}
+		</Provider>
+	);
+});

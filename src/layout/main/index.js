@@ -1,12 +1,12 @@
 import React from 'react';
 import { withThemeContext } from '../../context';
 
-function MainComponent({ drawerConfig, width }) {
+function MainComponent({ drawerConfig, isTablet }) {
 	return (
 		<div
 			className='transition-apply'
 			style={
-				width === 'xs' || width === 'sm'
+				isTablet
 					? {}
 					: {
 							marginLeft: drawerConfig.width,

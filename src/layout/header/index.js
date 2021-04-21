@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { withThemeContext } from '../../context';
 
-function Header({ drawerConfig, toggleDrawer, width }) {
+function Header({ drawerConfig, toggleDrawer, isTablet, onLogout }) {
 	const classes = useStyles();
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
@@ -27,7 +27,7 @@ function Header({ drawerConfig, toggleDrawer, width }) {
 		<div
 			className={`transition-apply ${classes.root}`}
 			style={
-				width === 'xs' || width === 'sm'
+				isTablet
 					? {}
 					: {
 							marginLeft: drawerConfig.width,
@@ -37,7 +37,7 @@ function Header({ drawerConfig, toggleDrawer, width }) {
 		>
 			<AppBar position='static'>
 				<Toolbar>
-					{(width === 'xs' || width === 'sm') && (
+					{isTablet && (
 						<IconButton
 							edge='start'
 							className={classes.menuButton}
@@ -77,7 +77,7 @@ function Header({ drawerConfig, toggleDrawer, width }) {
 							onClose={handleClose}
 						>
 							<MenuItem onClick={handleClose}>Profile</MenuItem>
-							<MenuItem onClick={handleClose}>My account</MenuItem>
+							<MenuItem onClick={onLogout}>Sign Out</MenuItem>
 						</Menu>
 					</div>
 				</Toolbar>
