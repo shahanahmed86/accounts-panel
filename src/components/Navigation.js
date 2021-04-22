@@ -16,9 +16,7 @@ function Navigation({ items, title, path, Icon, isExpand, toggleExpand }) {
 	};
 	return (
 		<ListItem button onClick={onClickItem} selected={location.pathname === path}>
-			<ListItemIcon>
-				<Icon />
-			</ListItemIcon>
+			<ListItemIcon>{Icon && <Icon />}</ListItemIcon>
 			<ListItemText primary={title} />
 			{items && (isExpand > -1 ? <ExpandLess /> : <ExpandMore />)}
 		</ListItem>

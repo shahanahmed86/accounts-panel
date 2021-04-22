@@ -18,7 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // reusable with lazy effect
 const CustomRoute = lazy(() => import('./components/CustomRoute'));
-const Login = lazy(() => import('./views/Login'));
+const Login = lazy(() => import('./views/login'));
 const Layout = lazy(() => import('./layout'));
 
 function App({ isLoading }) {

@@ -1,14 +1,11 @@
 import React from 'react';
 
-import { withAuthContext } from '../../context';
-
-function Dashboard({ role, isLoading }) {
-	if (isLoading) return '';
+function Dashboard() {
 	return (
 		<div>
-			<h3>Dashboard page for {role}</h3>
+			<h3>Dashboard page</h3>
 		</div>
 	);
 }
 
-export default withAuthContext(Dashboard);
+export default Dashboard;
