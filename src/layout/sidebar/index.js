@@ -9,15 +9,25 @@ import { withThemeContext } from '../../context';
 import routes from '../../routes';
 import { Navigation } from '../../components';
 import Collapse from '@material-ui/core/Collapse';
+import { useLocation } from 'react-router-dom';
 
 function SideBar({ drawerConfig, toggleDrawer, isMobile, isTablet }) {
+	const location = useLocation();
+
 	const [isExpand, setExpand] = useState(-1);
 	const toggleExpand = (i) => setExpand((prev) => (prev === i ? -1 : i));
+
 	useEffect(() => {
+		const ind = routes.findIndex((route) => {
+			return (
+				route.path === location.pathname || (route.items && route.items.some((item) => item.path === location.pathname))
+			);
+		});
+		toggleExpand(ind);
 		return () => {
 			setExpand(-1);
 		};
-	}, []);
+	}, [location]);
 	return (
 		<Drawer
 			anchor='left'

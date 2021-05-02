@@ -15,7 +15,7 @@ export const withThemeContext = (Component) => (props) => (
 	<Consumer>{(value) => <Component {...value} {...props} />}</Consumer>
 );
 
-export const ThemeProvider = withAuthContext(function ({ onLogout, ...props }) {
+export const ThemeProvider = withAuthContext(function ({ onLogout, role, ...props }) {
 	const isMobile = useMediaQuery('(max-width:600px)');
 	const isTablet = useMediaQuery('(max-width:800px)');
 	const isDesktop = useMediaQuery('(min-width:801px)');
@@ -43,7 +43,9 @@ export const ThemeProvider = withAuthContext(function ({ onLogout, ...props }) {
 				isMobile,
 				isTablet,
 				isDesktop,
-				onLogout
+				// from authContext
+				onLogout,
+				role
 			}}
 		>
 			{props.children}

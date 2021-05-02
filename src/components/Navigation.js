@@ -5,6 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { useHistory, useLocation } from 'react-router';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import './index.scss';
 
 function Navigation({ items, title, path, Icon, isExpand, toggleExpand }) {
 	const history = useHistory();
@@ -15,7 +16,13 @@ function Navigation({ items, title, path, Icon, isExpand, toggleExpand }) {
 		else history.push(path);
 	};
 	return (
-		<ListItem button onClick={onClickItem} selected={location.pathname === path}>
+		<ListItem
+			button
+			onClick={onClickItem}
+			selected={location.pathname === path}
+			classes={{ selected: 'nav-item-selected' }}
+			className='nav-item'
+		>
 			<ListItemIcon>{Icon && <Icon />}</ListItemIcon>
 			<ListItemText primary={title} />
 			{items && (isExpand > -1 ? <ExpandLess /> : <ExpandMore />)}

@@ -24,7 +24,7 @@ const routes = [
 		exact: true,
 		Icon: (props) => <AccountBalanceIcon {...props} />,
 		title: 'Transactions',
-		isAdminRoute: false
+		isAdminRoute: true
 	},
 	{
 		path: '/app/reports',

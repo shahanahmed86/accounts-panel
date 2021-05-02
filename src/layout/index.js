@@ -12,9 +12,7 @@ const SideBar = lazy(() => import('./sidebar'));
 function Layout() {
 	return (
 		<Suspense fallback={<Loader loading={true} />}>
-			<header>
-				<Header />
-			</header>
+			<Header />
 			<main className='main-wrapper'>
 				<SideBar />
 				<Main />

@@ -9,6 +9,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { withThemeContext } from '../../context';
+import './index.scss';
 
 function Header({ drawerConfig, toggleDrawer, isTablet, onLogout }) {
 	const classes = useStyles();
@@ -16,16 +17,12 @@ function Header({ drawerConfig, toggleDrawer, isTablet, onLogout }) {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
 
-	const handleMenu = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
+	const handleMenu = (event) => setAnchorEl(event.currentTarget);
+	const handleClose = () => setAnchorEl(null);
 
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
 	return (
 		<div
-			className={`transition-apply ${classes.root}`}
+			className={`transition-apply ${classes.root} header`}
 			style={
 				isTablet
 					? {}
@@ -35,29 +32,20 @@ function Header({ drawerConfig, toggleDrawer, isTablet, onLogout }) {
 					  }
 			}
 		>
-			<AppBar position='static'>
+			<AppBar position='static' elevation={0} color='inherit'>
 				<Toolbar>
 					{isTablet && (
-						<IconButton
-							edge='start'
-							className={classes.menuButton}
-							color='inherit'
-							aria-label='menu'
-							onClick={toggleDrawer}
-						>
+						<IconButton edge='start' className={classes.menuButton} aria-label='menu' onClick={toggleDrawer}>
 							<MenuIcon />
 						</IconButton>
 					)}
-					<Typography variant='h6' className={classes.title}>
-						Photos
-					</Typography>
+					<Typography variant='h6' className={classes.title} color='primary' children='Photos' />
 					<div>
 						<IconButton
 							aria-label='account of current user'
 							aria-controls='menu-appbar'
 							aria-haspopup='true'
 							onClick={handleMenu}
-							color='inherit'
 						>
 							<AccountCircle />
 						</IconButton>
