@@ -38,7 +38,7 @@ function SideBar({ drawerConfig, toggleDrawer, isMobile, isTablet }) {
 		>
 			<div style={{ width: drawerConfig.width }} className='transition-apply no-wrap'>
 				<div
-					style={{ height: isMobile ? 55 : 63 }}
+					style={{ height: isMobile ? 55 : 64 }}
 					className={`display-flex align-flex-center${drawerConfig.isOpen ? ' justify-flex-end' : ''}`}
 				>
 					{!isTablet && (

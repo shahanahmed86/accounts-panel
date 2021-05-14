@@ -8,26 +8,29 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import EditIcon from '@material-ui/icons/Edit';
 import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
 
-function Item({ name, haveChildren, ...props }) {
-	console.log(props);
-	const [isExpanded, setExpanded] = useState(false);
-	const toggleExpanded = () => setExpanded((prev) => !prev);
+function Item({ name, haveChildren, toggleExpand }) {
+	const [isHovered, setHovered] = useState(false);
+	const onMouseIn = () => setHovered(true);
+	const onMouseOut = () => setHovered(false);
 	return (
-		<ListItem disableGutters classes={{ dense: 'list-item' }}>
+		<ListItem disableGutters classes={{ dense: 'list-item' }} onMouseEnter={onMouseIn} onMouseLeave={onMouseOut}>
 			<ListItemIcon
 				className='cursor-pointer'
-				onClick={toggleExpanded}
+				onClick={toggleExpand}
 				classes={{
 					root: 'list-item-icon'
 				}}
+				onMouse
 			>
-				{isExpanded && !haveChildren ? <RemoveCircleOutline htmlColor='gray' /> : <AddCircleIcon htmlColor='green' />}
+				{!haveChildren ? <RemoveCircleOutline htmlColor='gray' /> : <AddCircleIcon htmlColor='green' />}
 			</ListItemIcon>
 			<ListItemText primary={name} />
-			<ListItemSecondaryAction>
-				<EditIcon className='cursor-pointer' color='primary' />
-				<DeleteIcon className='cursor-pointer' style={{ marginLeft: 5 }} color='secondary' />
-			</ListItemSecondaryAction>
+			{isHovered && (
+				<ListItemSecondaryAction>
+					<EditIcon className='cursor-pointer' color='primary' />
+					<DeleteIcon className='cursor-pointer' style={{ marginLeft: 5 }} color='secondary' />
+				</ListItemSecondaryAction>
+			)}
 		</ListItem>
 	);
 }
